@@ -8,6 +8,8 @@ const int MAX = 1e4 + 5;
 int id[MAX], nodes, edges;
 pair <long long, pair<int, int> > p[MAX];
 
+//start of union find algo
+//union find algo used to check if the selected node forms a cycle
 void initialize()
 {
     for(int i = 0;i < MAX;++i)
@@ -30,7 +32,9 @@ void union1(int x, int y)
     int q = root(y);
     id[p] = id[q];
 }
+//end of union find algo
 
+//start of krushkal
 long long kruskal(pair<long long, pair<int, int> > p[])
 {
     int x, y;
@@ -38,18 +42,19 @@ long long kruskal(pair<long long, pair<int, int> > p[])
     for(int i = 0;i < edges;++i)
     {
         // Selecting edges one by one in increasing order from the beginning
-        x = p[i].second.first;
-        y = p[i].second.second;
-        cost = p[i].first;
+        x = p[i].second.first;//starting node of the edge
+        y = p[i].second.second;//ending node of the edge
+        cost = p[i].first;//weight of the edge
         // Check if the selected edge is creating a cycle or not
-        if(root(x) != root(y))
+        if(root(x) != root(y))//checking if they do not form a cycle
         {
             minimumCost += cost;
             union1(x, y);
         }    
     }
-    return minimumCost;
+    return minimumCost;//return minimum cost of the spanning tree
 }
+//end of krushkal
 
 int main()
 {
@@ -63,7 +68,7 @@ int main()
         p[i] = make_pair(weight, make_pair(x, y));
     }
     // Sort the edges in the ascending order
-    sort(p, p + edges);
+    sort(p, p + edges);//sorting the edges according to their weight
     minimumCost = kruskal(p);
     cout << minimumCost << endl;
     return 0;
