@@ -2,9 +2,7 @@
  * Breadth First Search
  * Algorithm for Graph
  * implemented using C++ STL
- *
- * Authored by,
- * Vamsi Sangam.
+ * which using a Queue
  *
  */
  
@@ -12,48 +10,50 @@
 #include <vector>
 #include <list>
 #include <utility>
+#include <iostream>
  
 using namespace std;
  
-void breadthFirstSearch(vector< list< int > > adjacencyList, int parent[], int level[])
+void breadthFirstSearch(vector<list<int> > adjacencyList, int parent[], int level[], int start)
 {
     list<int>::iterator itr;
-    int i, par, lev;
-    bool flag = true;
+ 
+    int lev;
     //'lev' represents the level to be assigned
-    //'par' represents the parent to be assigned
-    //'flag' indicates if graph is unexplored or not
  
     lev = 0;
-    level[1] = lev;
-    /* We start from node 1
-     * So, Node 1 is at level 0
+    level[start] = lev;
+    /* We start from node 'start'
+     * So, Node 'start' is at level 0
      * All immediate neighbours are at
      * level 1 and so on.
      */
  
-    while (flag) {
-        flag = false;
-        for (i = 0; i < adjacencyList.size(); ++i) {
-            if (level[i] == lev) {
-                flag = true;
-                itr = adjacencyList[i].begin();
-                par = i;
+    list<int> VertexQueue;    // Queue of vertices to be processed
  
-                while (itr != adjacencyList[i].end()) {
-                    if (level[*itr] != -1) {
-                        ++itr;
-                        continue;
-                    }
+    VertexQueue.push_back(start);
+    // Start processing with the
+    // starting vertex
+    cout<<"Following is the bfs traversal of the tree"<<endl;
+    while (!VertexQueue.empty())    // While there are vertices to be processed
+    {
+        int newVertex = VertexQueue.front();
+        // The first vertex in queue
+        cout<<newVertex<<" ";
+        itr = adjacencyList[newVertex].begin();
+        // To explore all the vertices adjacent to it
  
-                    level[*itr] = lev + 1;
-                    parent[*itr] = par;
-                    ++itr;
-                }
+        while (itr != adjacencyList[newVertex].end()) {
+            if (level[*itr] == -1) {            // This is an unvisited vertex
+                level[*itr] = lev + 1;          // Set level
+                parent[*itr] = newVertex;       // Set parent
+                VertexQueue.push_back(*itr);    // Add it to the queue  
             }
+            ++itr;
         }
  
-        ++lev;
+        VertexQueue.pop_front();    // Pop out the processed vertex
+        ++lev;  // The next level
     }
 }
  
@@ -71,13 +71,12 @@ int main()
     vector< list<int> > adjacencyList(vertices + 1);
  
     printf("Enter the Edges V1 -> V2\n");
-     
+ 
     for (int i = 1; i <= edges; ++i) {
         scanf("%d%d", &v1, &v2);
-         
-        // Adding Edges in an indirected graph
+ 
+        // Adding Edge to the Directed Graph
         adjacencyList[v1].push_back(v2);
-        //adjacencyList[v2].push_back(v1);
     }
  
     printf("\nThe Adjacency List-\n");
@@ -95,9 +94,9 @@ int main()
     }
  
     int parent[vertices + 1];
-    //Each element of Parent Array holds the Node value of its parent
+    // Each element of Parent Array holds the Node value of its parent
     int level[vertices + 1];
-    //Each element of Level Array holds the Level value of that node
+    // Each element of Level Array holds the Level value of that node
  
     for (int i = 0; i <= vertices; ++i) {
         //Initialising our arrays
@@ -105,11 +104,14 @@ int main()
         level[i] = -1;
     }
  
-    breadthFirstSearch(adjacencyList, parent, level);
+    printf("\nEnter the Starting Vertex -\n");
+    scanf("%d", &v1);
+ 
+    breadthFirstSearch(adjacencyList, parent, level, v1);
  
     //Level Array
     printf("\nLevel and Parent Arrays -\n");
-    for (int i = 0; i <= vertices; ++i) {
+    for (int i = 0; i < vertices; ++i) {
         printf("Level of Node %d is %d, Parent is %d\n", i, level[i], parent[i]);
     }
  
