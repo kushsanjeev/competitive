@@ -1,44 +1,73 @@
-/* complexity 
-worst case = O(n^2)
-average case = O(nlogn)
-*/
-#include <iostream>
-#define FOR(i,n) for(i=0;i<n;i++)
-using namespace std;
-
-int _partition(int v[], int left, int right){
-	int pivot = v[right];
-	int i = left-1;
-	for(int j=left;j<=right-1;j++){
-		if(v[j] <= pivot){
-			i++;
-			swap(v[i], v[j]);	
-		}
-	}
-	swap(v[i+1], v[right]);
-	return i+1;
+/* C implementation QuickSort */
+#include<stdio.h>
+ 
+// A utility function to swap two elements
+void swap(int* a, int* b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
-
-void _quick(int v[], int left, int right){
-	if(left < right){
-		int partition_index = _partition(v, left, right);
-		_quick(v, left, partition_index - 1);
-		_quick(v, partition_index + 1, right);
-	}
+ 
+/* This function takes last element as pivot, places
+   the pivot element at its correct position in sorted
+    array, and places all smaller (smaller than pivot)
+   to left of pivot and all greater elements to right
+   of pivot */
+int partition (int arr[], int low, int high)
+{
+    int pivot = arr[high];    // pivot
+    int i = (low - 1);  // Index of smaller element
+ 
+    for (int j = low; j <= high- 1; j++)
+    {
+        // If current element is smaller than or
+        // equal to pivot
+        if (arr[j] <= pivot)
+        {
+            i++;    // increment index of smaller element
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
 }
-
-void quick_sort(int length, int v[]){
-	_quick(v, 0, length - 1);
+ 
+/* The main function that implements QuickSort
+ arr[] --> Array to be sorted,
+  low  --> Starting index,
+  high  --> Ending index */
+void quickSort(int arr[], int low, int high)
+{
+    if (low < high)
+    {
+        /* pi is partitioning index, arr[p] is now
+           at right place */
+        int pi = partition(arr, low, high);
+ 
+        // Separately sort elements before
+        // partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
 }
-int main(){
-    int n,i;
-    cin>>n;
-    int v[n];
-    FOR(i,n)
-        cin>>v[i];
-    quick_sort(n,v);
-    FOR(i,n)
-        cout<<v[i]<<",";
-    cout<<endl;
+ 
+/* Function to print an array */
+void printArray(int arr[], int size)
+{
+    int i;
+    for (i=0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("n");
+}
+ 
+// Driver program to test above functions
+int main()
+{
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    quickSort(arr, 0, n-1);
+    printf("Sorted array: n");
+    printArray(arr, n);
     return 0;
 }
