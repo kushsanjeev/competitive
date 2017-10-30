@@ -41,7 +41,7 @@ long long prim(int x)
 
 int main()
 {
-    int nodes, edges, x, y;
+    int nodes, edges, x, y,start;
     long long weight, minimumCost;
     cin >> nodes >> edges;
     for(int i = 0;i < edges;++i)
@@ -51,7 +51,9 @@ int main()
         adj[y].push_back(make_pair(weight, x));
     }
     // Selecting 1 as the starting node
-    minimumCost = prim(1);
+    cout<<"Input the starting node"<<endl;
+    cin>>start;
+    minimumCost = prim(start);
     cout << minimumCost << endl;
     return 0;
 }
