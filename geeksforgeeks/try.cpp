@@ -1,37 +1,86 @@
-#include <iostream>
-#include <list>
-#include <vector>
-#include <stack>
-#include <cstring>
+//deletion of a middile element of single linked list(not necessary the exact middle)
+//you have given acces to that node only
+
+
+
+#include<bits/stdc++.h>
+
 using namespace std;
-bool vis[10] = {0};
-vector<int> vec1[10];
-void DFSU(int v)
+
+struct linkNode{
+	int data;
+	struct linkNode* next;
+};
+
+struct linkNode* head;
+
+
+struct linkNode *createList()
 {
-    vis[v] = true;
-    cout<<v<<" ";
-    vector<int> ::iterator itr;
-    for(itr = vec1[v].begin();itr!=vec1[v].end();++itr)
-        if(!vis[*itr])
-            DFSU(*itr);
+	struct linkNode* temp;
+	struct linkNode* prev=head;
+	temp = (struct linkNode*)malloc(sizeof(struct linkNode));
+	int x;
+	printf("\nEnter element to be inserted : ");
+	scanf("%d",&x);
+	printf("\n");
+	temp->data = x;
+	temp->next = NULL;
+	if(head==NULL)  // for 1st node 
+	head = temp;
+	else {
+		while(prev->next!=NULL){   // for inserting node at the end of list
+	    prev=prev->next;
+		}
+	    prev->next=temp;
+	}
+	
+	
+	return temp;
 }
-void DFS(int v)
+
+//code for deleteing the middle node
+bool delMidNode(linkNode *n)  // address of only element which is to be deleted 
 {
-    for(int i=1;i<v;i++)
-    {
-        if(vis[i]==false)
-            DFSU(i);
-    }
+	if(n==NULL || n->next==NULL)
+	{
+		return false;   // Failure case
+	}
+	struct linkNode* next=n->next;
+	n->data=next->data;
+	n->next=next->next;
+	delete(next);
+	return true;
 }
+
+
+void Print(){
+	struct linkNode* temp = head;
+	while(temp!=NULL){
+		printf("%d  ",temp->data);
+		temp = temp->next;
+	}
+	printf("\n");
+}
+
+
+// driver code for programm
 int main(){
-    int V,edges,i,a,b;
-    cin>>V>>edges;
-    for(i=0;i<edges;i++)
-    {
-        cin>>a>>b;
-        vec1[a].push_back(b);
-        vec1[b].push_back(a);
-    }
-    DFS(V);
-    return 0;
+	head = NULL;
+	printf("Enter number of nodes : ");
+	int n,mid;
+	scanf("%d",&n);
+	printf("\n");
+	int i;
+	struct linkNode *nodeAdd[n];
+	for(i=0;i<n;i++){
+	    nodeAdd[i]=createList();
+	}	
+	printf("\n Enter the position of element to be deleted from middle : ");  // the node which u want to delete
+	scanf("%d",&mid);
+	printf("list before deletion :");
+	Print();
+	delMidNode(nodeAdd[mid-1]);
+	printf("list after deletion :");
+	Print();
 }
